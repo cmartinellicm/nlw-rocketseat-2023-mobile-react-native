@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { styled } from 'nativewind'
 import { ImageBackground } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
@@ -14,7 +15,6 @@ import blurBg from '../src/assets/bg-blur.png'
 import Stripes from '../src/assets/stripes.svg'
 import { SplashScreen, Stack } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import { useEffect, useState } from 'react'
 
 const StyledStripes = styled(Stripes)
 
@@ -57,6 +57,7 @@ export default function Layout() {
         }}
       >
         <Stack.Screen name="index" redirect={isUserAuthenticated} />
+        <Stack.Screen name="new" />
         <Stack.Screen name="memories" />
       </Stack>
     </ImageBackground>
