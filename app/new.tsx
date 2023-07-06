@@ -1,16 +1,47 @@
-import { Switch, Text, TouchableOpacity, View } from 'react-native'
+import { useState } from 'react'
+import {
+  Image,
+  ScrollView,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Icon from '@expo/vector-icons/Feather'
+import { Link } from 'expo-router'
+import * as ImagePicker from 'expo-image-picker'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
-import { Link } from 'expo-router'
-import { useState } from 'react'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
 
 export default function NewMemory() {
   const { bottom, top } = useSafeAreaInsets()
 
+  const [preview, setPreview] = useState<string | null>(null)
+
+  const [content, setContent] = useState('')
   const [isPublic, setIsPublic] = useState(false)
+
+  async function openImagePicker() {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1
+      })
+
+      if (result.assets[0]) {
+        setPreview(result.assets[0].uri)
+      }
+    } catch (err) {
+      // tratar erro
+    }
+  }
+
+  function handleCreateMemory() {
+    console.log(content, isPublic)
+  }
 
   return (
     <ScrollView
@@ -42,18 +73,28 @@ export default function NewMemory() {
 
         <TouchableOpacity
           activeOpacity={0.7}
+          onPress={openImagePicker}
           className="h-32 items-center justify-center rounded-lg border border-dashed border-gray-500 bg-black/20"
         >
-          <View className="flex-row items-center gap-2">
-            <Icon name="image" color="#FFF" />
-            <Text className="font-body text-sm text-gray-500">
-              Adicionar foto ou vídeo de capa
-            </Text>
-          </View>
+          {preview ? (
+            <Image
+              source={{ uri: preview }}
+              className="h-full w-full rounded-lg object-cover"
+            />
+          ) : (
+            <View className="flex-row items-center gap-2">
+              <Icon name="image" color="#FFF" />
+              <Text className="font-body text-sm text-gray-500">
+                Adicionar foto ou vídeo de capa
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
 
         <TextInput
           multiline
+          value={content}
+          onChangeText={setContent}
           className="p-0 font-body text-lg text-gray-50"
           placeholderTextColor="#56565a"
           placeholder="Fique livre para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre."
@@ -61,6 +102,7 @@ export default function NewMemory() {
 
         <TouchableOpacity
           activeOpacity={0.7}
+          onPress={handleCreateMemory}
           className="items-center self-end rounded-full bg-green-500 px-5 py-3"
         >
           <Text className="font-alt text-sm uppercase text-black">Salvar</Text>
