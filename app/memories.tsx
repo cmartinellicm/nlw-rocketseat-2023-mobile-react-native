@@ -13,10 +13,10 @@ import { api } from '../src/lib/api'
 dayjs.locale(ptBr)
 
 interface Memory {
-  coverUrl: string
-  exerpt: string
-  createdAt: string
   id: string
+  coverUrl: string
+  excerpt: string
+  createdAt: string
 }
 
 export default function NewMemory() {
@@ -88,7 +88,7 @@ export default function NewMemory() {
                   className="aspect-video w-full rounded-lg"
                 />
                 <Text className="font-body text-base leading-relaxed text-gray-100">
-                  {memory.exerpt}
+                  {memory.excerpt}
                 </Text>
                 <Link href="/memories/id" asChild>
                   <TouchableOpacity className="flex-row items-center gap-2">
